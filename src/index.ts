@@ -1,4 +1,4 @@
-import { sum } from '@skywall/validator-helper'
+// import { sum } from '@skywall/validator-helper'
 
-const result = sum(1, 2)
+const result = 2
 console.log('This is index.ts', result) 

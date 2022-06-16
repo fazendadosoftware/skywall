@@ -25,6 +25,7 @@ export default {
     env: Env,
     ctx: ExecutionContext
   ): Promise<Response> {
-    return new Response("Hello World!");
+    const time = new Date().toISOString()
+    return new Response(`@skywall, now is: ${time}`)
   },
 };
