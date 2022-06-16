@@ -19,8 +19,8 @@ export default {
   ): Promise<Response> {
     console.log('ENV', env)
     const { searchParams } = new URL(request.url)
-    const origin = typeof searchParams.get('origin') === 'string' ? parseInt(searchParams.get('origin') as string) : null
-    const destination = typeof searchParams.get('destination') === 'string' ? parseInt(searchParams.get('origin') as string) : null
+    const origin = searchParams.get('origin')
+    const destination = searchParams.get('destination')
     if (origin === null) return new Response('invalid origin')
     if (destination === null) return new Response('invalid destination')
     const estimateCostResponse = await estimateCost(origin, destination, env)

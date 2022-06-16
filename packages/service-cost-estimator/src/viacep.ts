@@ -11,7 +11,7 @@ export interface ViaCepResponse {
   uf: string
 }
 
-const validateCEP = async (cep: number): Promise<ViaCepResponse | null> => {
+const validateCEP = async (cep: number | string): Promise<ViaCepResponse | null> => {
   try {
     const response:Response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
     if (response.ok) {

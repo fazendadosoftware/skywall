@@ -11,7 +11,7 @@ export interface EstimateCostResponse {
 }
 
 const fields: Array<keyof ViaCepResponse> = ['logradouro', 'cep', 'localidade', 'uf']
-const estimateCost = async (originCep: number, destinationCep: number, env: Env) => {
+const estimateCost = async (originCep: number | string, destinationCep: number | string, env: Env) => {
   const units = 'metric'
   const validatedCeps = await Promise.all([originCep, destinationCep].map(validateCEP))
   const invalidCeps = validatedCeps.filter(cep => cep === null).length > 0
