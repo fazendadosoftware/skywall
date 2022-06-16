@@ -8,6 +8,7 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+import { validateCEP } from './viacep'
 export interface Env {
   // Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
   // MY_KV_NAMESPACE: KVNamespace;
@@ -25,7 +26,11 @@ export default {
     env: Env,
     ctx: ExecutionContext
   ): Promise<Response> {
-    const time = new Date().toISOString()
-    return new Response(`@skywall, now is: ${time}`)
+    const { searchParams } = new URL(request.url)
+    let cep = typeof searchParams.get('cep') === 'string' ? parseInt(searchParams.get('cep') as string) : null
+    if (cep === null) return new Response('invalid cep')
+    const address = await validateCEP(cep)
+    if (address === null) return new Response(`invalid cep: ${cep}`)
+    return new Response(JSON.stringify(address, null, 2))
   },
 };
