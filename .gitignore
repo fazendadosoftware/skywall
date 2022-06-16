@@ -11,3 +11,4 @@ tsconfig.tsbuildinfo
 
 superbin/
 bin
+.env

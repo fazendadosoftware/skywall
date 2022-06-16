@@ -14,7 +14,7 @@
     "outDir": "./superbin"
   },
   "references": [
-    { "path": "./packages/validator-helper" }
+    { "path": "./packages/service-cost-estimator" }
   ],
   "files": [
     "./src/index.ts"

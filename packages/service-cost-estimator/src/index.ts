@@ -8,17 +8,8 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
-import { validateCEP } from './viacep'
-export interface Env {
-  // Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-  // MY_KV_NAMESPACE: KVNamespace;
-  //
-  // Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
-  // MY_DURABLE_OBJECT: DurableObjectNamespace;
-  //
-  // Example binding to R2. Learn more at https://developers.cloudflare.com/workers/runtime-apis/r2/
-  // MY_BUCKET: R2Bucket;
-}
+import { estimateCost } from './estimator'
+import { Env } from './types.d'
 
 export default {
   async fetch(
@@ -26,11 +17,13 @@ export default {
     env: Env,
     ctx: ExecutionContext
   ): Promise<Response> {
+    console.log('ENV', env)
     const { searchParams } = new URL(request.url)
-    let cep = typeof searchParams.get('cep') === 'string' ? parseInt(searchParams.get('cep') as string) : null
-    if (cep === null) return new Response('invalid cep')
-    const address = await validateCEP(cep)
-    if (address === null) return new Response(`invalid cep: ${cep}`)
-    return new Response(JSON.stringify(address, null, 2))
-  },
-};
+    const origin = typeof searchParams.get('origin') === 'string' ? parseInt(searchParams.get('origin') as string) : null
+    const destination = typeof searchParams.get('destination') === 'string' ? parseInt(searchParams.get('origin') as string) : null
+    if (origin === null) return new Response('invalid origin')
+    if (destination === null) return new Response('invalid destination')
+    const estimateCostResponse = await estimateCost(origin, destination, env)
+    return new Response(JSON.stringify(estimateCostResponse, null, 2))
+  }
+}
